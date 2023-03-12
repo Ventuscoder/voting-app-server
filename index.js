@@ -21,7 +21,7 @@ app.use(express.json())
 
 app.post('/new', (req, res)=>{
     const data = req.body
-    polls.create(data).then(a=>console.log(a))
+    polls.create(data).then(a=>res.send(a))
 })
 
 app.listen(8000, ()=>{

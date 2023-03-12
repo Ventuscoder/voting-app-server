@@ -12,15 +12,16 @@ const pollSchema = mongoose.Schema({
     options: [{opt: String, votes: Number}]
 })
 
-const Polls = mongoose.model('Poll', pollSchema)
+const polls = mongoose.model('Poll', pollSchema)
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res)=>{
-    res.json({message: 'Yo, server is connected'})
+app.post('/new', (req, res)=>{
+    const data = req.body.json()
+    polls.create(data).then(a=>console.log(a))
 })
 
 app.listen(8000, ()=>{

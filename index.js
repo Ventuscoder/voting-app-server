@@ -21,7 +21,13 @@ app.use(express.json())
 
 app.post('/new', (req, res)=>{
     const data = req.body
-    polls.create(data).then(a=>res.send(a))
+    polls.create(data).then(poll=>res.send(poll))
+})
+
+app.get('/enter/:id', (req, res)=>{
+    polls.findOne({_id: req.params.id}, function(err, poll) {
+        res.send(poll)
+    })
 })
 
 app.listen(8000, ()=>{

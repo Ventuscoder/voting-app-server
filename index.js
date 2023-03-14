@@ -25,13 +25,7 @@ app.post('/new', (req, res)=>{
 })
 
 app.get('/enter/:id', (req, res)=>{
-    polls.findOne({_id: req.params.id}, function(err, poll) {
-        if (err) {
-            res.send('Data not found')
-        } else {
-            res.send(poll)
-        }
-    })
+    polls.findOne({_id: req.params.id}).then(data=>res.send(data)).catch(err=>res.send('Data not found'))
 })
 
 app.listen(8000, ()=>{

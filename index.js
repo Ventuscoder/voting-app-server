@@ -26,7 +26,11 @@ app.post('/new', (req, res)=>{
 
 app.get('/enter/:id', (req, res)=>{
     polls.findOne({_id: req.params.id}, function(err, poll) {
-        res.send(poll)
+        if (err) {
+            res.send('Data not found')
+        } else {
+            res.send(poll)
+        }
     })
 })
 

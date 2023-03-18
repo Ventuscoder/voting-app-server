@@ -31,7 +31,7 @@ app.get('/enter/:id', (req, res)=>{
 app.get('/update/:poll/:option', (req, res)=>{
     polls.findOne({_id: req.params.poll}).then(data=>{
         let newOptions = data.options.map(option=>option._id==req.params.option ? {opt: option.opt, votes: option.votes+1, _id: option._id} : option)
-        polls.findOneAndUpdate({_id: req.params.poll}, {topic: data.topic, options: newOptions}).then(res.send('Updated!')).catch(err=>res.send('Could not update'))
+        polls.findOneAndUpdate({_id: req.params.poll}, {topic: data.topic, options: newOptions}, {new: true}).then(updatedData=>res.send(updatedData)).catch(err=>res.send('Could not update'))
     })
     /* polls.findOne({_id: req.params.poll}).then(data=>{
         let newOptions = data.options.map(option=>option._id==req.params.option ? {opt: option.opt, votes: option.votes+1} : option)

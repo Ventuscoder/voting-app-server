@@ -1,4 +1,5 @@
 require('dotenv').config()
+const port = process.env.PORT || 8000
 
 const mongoose = require('mongoose')
 const express = require('express')
@@ -39,6 +40,6 @@ app.get('/update/:poll/:option', (req, res)=>{
     }).catch(err=>res.send('Data not found')) */
 })
 
-app.listen(8000, ()=>{
-    console.log('Server is running on port 8000')
+app.listen(port, ()=>{
+    console.log(`Server is running on ${port}`)
 })

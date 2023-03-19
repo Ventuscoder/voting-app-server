@@ -3,6 +3,7 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
+const { Router } = require('express')
 
 let uri = `mongodb+srv://voting-app:${process.env.PASSWORD_DB}@cluster0.bdehkf7.mongodb.net/?retryWrites=true&w=majority`
 mongoose.connect(uri)
@@ -16,19 +17,21 @@ const polls = mongoose.model('Poll', pollSchema)
 
 const app = express()
 
+const router = express.Router()
+
 app.use(cors())
 app.use(express.json())
 
-app.post('/new', (req, res)=>{
+router.post('/new', (req, res)=>{
     const data = req.body
     polls.create(data).then(poll=>res.send(poll))
 })
 
-app.get('/enter/:id', (req, res)=>{
+router.get('/enter/:id', (req, res)=>{
     polls.findOne({_id: req.params.id}).then(data=>res.send(data)).catch(err=>res.send('Data not found'))
 })
 
-app.get('/update/:poll/:option', (req, res)=>{
+router.get('/update/:poll/:option', (req, res)=>{
     polls.findOne({_id: req.params.poll}).then(data=>{
         let newOptions = data.options.map(option=>option._id==req.params.option ? {opt: option.opt, votes: option.votes+1, _id: option._id} : option)
         polls.findOneAndUpdate({_id: req.params.poll}, {topic: data.topic, options: newOptions}, {new: true}).then(updatedData=>res.send(updatedData)).catch(err=>res.send('Could not update'))
@@ -39,6 +42,10 @@ app.get('/update/:poll/:option', (req, res)=>{
     }).catch(err=>res.send('Data not found')) */
 })
 
+app.use(Router)
+
 app.listen(8000, ()=>{
     console.log('Server is running on port 8000')
 })
+
+module.exports = app
